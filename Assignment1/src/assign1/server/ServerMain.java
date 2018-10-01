@@ -29,6 +29,5 @@ public class ServerMain extends UnicastRemoteObject implements CommunicationInte
         registry.rebind("ServerReference", serverObj);
 
         System.out.println("Server ready");
-
     }
 }
