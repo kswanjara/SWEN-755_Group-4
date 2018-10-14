@@ -9,8 +9,8 @@ public class VehicleApp {
     public double longitude;
     public Receiver receiver;
 
-    public VehicleApp() {
-
+    public VehicleApp(Receiver receiver) {
+        this.receiver = receiver;
     }
 
     class HeartBeatSender extends TimerTask {
@@ -23,10 +23,8 @@ public class VehicleApp {
             Random random_number = new Random();
             int num = random_number.nextInt(50) + 1;
 
-            if(num < 45){
-                receiver.receiveHeartBeat(new Date());
-            }else{
-                //system broke, don't do anything
+            if(num < 35){
+                VehicleApp.this.receiver.receiveHeartbeat(new Date());
             }
         }
     }

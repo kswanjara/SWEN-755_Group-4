@@ -1,16 +1,29 @@
 package assign1.main;
 
 import java.util.Date;
+import java.util.TimerTask;
 
 public class Receiver {
-    private final int checkingInterval = 10;
-    private final int expirationTime = 15;
-
     public Date lastUpdated;
-    public boolean processAvailable;
+    
+    public Receiver(Date date) {
+        this.lastUpdated = date;
+    }
 
-    public Receiver() {
+    class CheckUpdate extends TimerTask {
+        public final int expirationTime = 15;
 
+        public void run(){
+            //Turn the current time and last update time into seconds 
+            long current_time = (new Date().getTime())/1000;
+            long last_updated = ((Receiver.this.lastUpdated).getTime())/1000;
+
+            if(current_time - last_updated >= this.expirationTime){
+                System.out.println("PROCESS NOT AVAILABLE ABORT ABORT");
+            }else{
+                System.out.println("Process Available");
+            }
+        }
     }
 
     /*
@@ -19,23 +32,7 @@ public class Receiver {
     */
     public void receiveHeartbeat(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
-        this.processAvailable = true;
-    }
-
-    /*
-    *   Check to see we have a recent update within 
-    *   the expirationTime threshold
-    */
-    public void checkLastUpdate(){
-
-        //Turn the current time and last update time into seconds 
-        int current_time = (new Date().getTime())/1000;
-        int last_updated = (this.lastUpdated.getTime())/1000;
-
-        if(current_time - last_updated > this.expirationTime){
-            //the heartbeat isn't getting sent, we need to do something
-        }
-
+        System.out.println("Newly updated time: " + lastUpdated);
     }
 
     public int getCheckingInterval(){
