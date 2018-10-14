@@ -13,6 +13,6 @@ public class ApplicationStarter {
     public static void main(String[] args) throws RemoteException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry("localhost" , 8888);
         serverRef = (CommunicationInterface) registry.lookup("ServerReference");
-        System.out.println(serverRef.connectToServer("Hello server!"));;
+        System.out.println(serverRef.connectToServer("Hello server!"));
     }
 }
