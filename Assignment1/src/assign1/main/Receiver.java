@@ -44,7 +44,8 @@ public class Receiver {
         System.out.println("Newly updated time: " + lastUpdated);
     }
 
+    /* NOT BEING USED AS OF NOW
     public int getCheckingInterval(){
         return this.checkingInterval;
-    }
+    }*/
 }
