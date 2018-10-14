@@ -16,7 +16,9 @@ import assign1.main.Receiver;
 
 public class ApplicationStarter {
     private static CommunicationInterface serverRef;
-    private static Timer timer = new Timer();
+
+    private static Timer timer_heartbeat = new Timer();
+    private static Timer timer_check = new Timer();
 
     private static Receiver receiver = new Receiver(new Date(), timer);
     private static VehicleApp vapp = new VehicleApp(receiver);
@@ -26,9 +28,6 @@ public class ApplicationStarter {
         serverRef = (CommunicationInterface) registry.lookup("ServerReference");
 
         timer.schedule(vapp.new HeartBeatSender(), 0, 12000);
-
-        Timer t = new Timer();
-        t.schedule(receiver.new CheckUpdate(), 0, 5000);
-        
+        timer_check.schedule(receiver.new CheckUpdate(), 0, 5000);
     }
 }
