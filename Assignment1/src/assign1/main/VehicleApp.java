@@ -1,6 +1,7 @@
 package assign1.main;
 
 import java.util.Random;
+import java.util.TimerTask;
 
 public class VehicleApp {
     public double latitude;
@@ -9,6 +10,12 @@ public class VehicleApp {
 
     public VehicleApp() {
 
+    }
+
+    class HeartBeatSender extends TimerTask {
+        public void run(){
+            System.out.println("hello");
+        }
     }
 
     public string getCoordinates() {
