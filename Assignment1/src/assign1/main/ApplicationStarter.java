@@ -7,6 +7,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Timer;
+import assign1.main.VehicleApp;
+import assign1.main.VehicleApp.HeartBeatSender;
 
 public class ApplicationStarter {
     private static CommunicationInterface serverRef;
@@ -15,8 +17,9 @@ public class ApplicationStarter {
         Registry registry = LocateRegistry.getRegistry("localhost" , 8888);
         serverRef = (CommunicationInterface) registry.lookup("ServerReference");
 
+        VehicleApp vapp = new VehicleApp();
         Timer timer = new Timer();
-        timer.schedule(new HeartBeatSender(), 0, 5000);
-        System.out.println(serverRef.connectToServer("Hello server!"));
+        timer.schedule(vapp.new HeartBeatSender(), 0, 5000);
+        
     }
 }

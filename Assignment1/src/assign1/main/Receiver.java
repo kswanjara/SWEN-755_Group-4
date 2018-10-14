@@ -1,8 +1,10 @@
 package assign1.main;
 
+import java.util.Date;
+
 public class Receiver {
-    public final int checkingInterval = 10;
-    public final int expirationTime = 15;
+    private final int checkingInterval = 10;
+    private final int expirationTime = 15;
 
     public Date lastUpdated;
     public boolean processAvailable;
@@ -30,9 +32,13 @@ public class Receiver {
         int current_time = (new Date().getTime())/1000;
         int last_updated = (this.lastUpdated.getTime())/1000;
 
-        if(current_time - last_updated > this.expirationTime()){
+        if(current_time - last_updated > this.expirationTime){
             //the heartbeat isn't getting sent, we need to do something
         }
 
+    }
+
+    public int getCheckingInterval(){
+        return this.checkingInterval;
     }
 }
