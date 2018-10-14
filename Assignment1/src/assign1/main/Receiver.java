@@ -2,12 +2,15 @@ package assign1.main;
 
 import java.util.Date;
 import java.util.TimerTask;
+import java.util.Timer;
 
 public class Receiver {
     public Date lastUpdated;
-    
-    public Receiver(Date date) {
+    public Timer timer;
+
+    public Receiver(Date date, Timer timer) {
         this.lastUpdated = date;
+        this.timer = timer;
     }
 
     class CheckUpdate extends TimerTask {
@@ -19,7 +22,13 @@ public class Receiver {
             long last_updated = ((Receiver.this.lastUpdated).getTime())/1000;
 
             if(current_time - last_updated >= this.expirationTime){
-                System.out.println("PROCESS NOT AVAILABLE ABORT ABORT");
+                System.out.println("PROCESS NOT AVAILABLE ABORTING");
+                Receiver.this.timer.cancel();
+
+                /*
+                *   we need to do more stuff here since this is where we realize
+                *   the critical process is no longer working
+                */
             }else{
                 System.out.println("Process Available");
             }

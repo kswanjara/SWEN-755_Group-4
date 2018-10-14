@@ -16,14 +16,15 @@ import assign1.main.Receiver;
 
 public class ApplicationStarter {
     private static CommunicationInterface serverRef;
-    private static Receiver receiver = new Receiver(new Date());
+    private static Timer timer = new Timer();
+
+    private static Receiver receiver = new Receiver(new Date(), timer);
     private static VehicleApp vapp = new VehicleApp(receiver);
 
     public static void main(String[] args) throws RemoteException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry("localhost" , 8888);
         serverRef = (CommunicationInterface) registry.lookup("ServerReference");
 
-        Timer timer = new Timer();
         timer.schedule(vapp.new HeartBeatSender(), 0, 12000);
 
         Timer t = new Timer();
