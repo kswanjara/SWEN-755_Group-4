@@ -20,14 +20,14 @@ public class ApplicationStarter {
     private static Timer timer_heartbeat = new Timer();
     private static Timer timer_check = new Timer();
 
-    private static Receiver receiver = new Receiver(new Date(), timer);
+    private static Receiver receiver = new Receiver(new Date(), timer_heartbeat);
     private static VehicleApp vapp = new VehicleApp(receiver);
 
     public static void main(String[] args) throws RemoteException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry("localhost" , 8888);
         serverRef = (CommunicationInterface) registry.lookup("ServerReference");
 
-        timer.schedule(vapp.new HeartBeatSender(), 0, 12000);
+        timer_heartbeat.schedule(vapp.new HeartBeatSender(), 0, 12000);
         timer_check.schedule(receiver.new CheckUpdate(), 0, 5000);
     }
 }
