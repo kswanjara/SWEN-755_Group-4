@@ -17,7 +17,7 @@ public class VehicleApplication {
         Registry registry = LocateRegistry.getRegistry("localhost", 8888);
         serverRef = (CommunicationInterface) registry.lookup("ServerReference");
 
-        timer_heartbeat.schedule(new Heartbeat(serverRef), 0, 6000);
+        timer_heartbeat.schedule(new Heartbeat(serverRef), 0, 400);
 
         boolean validCoordinates = true;
         while (validCoordinates) {
@@ -37,7 +37,7 @@ public class VehicleApplication {
         double maxLon = 180.00;
         double longitude = minLon + (double) (Math.random() * ((maxLon - minLon) + 1));
 
-        if (latitude > 85.0 && longitude < 10.0) {
+        if (latitude > 89.5 && longitude < 0.5) {
             System.out.println("Error in critical process");
             return false;
         }
