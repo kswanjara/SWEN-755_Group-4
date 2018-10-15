@@ -8,7 +8,7 @@ import java.util.TimerTask;
 
 class CheckHeartbeat extends TimerTask {
     private final int expirationTime = 15;
-    private static CommunicationInterface serverRef;
+    private CommunicationInterface serverRef;
 
     CheckHeartbeat(CommunicationInterface serverRef) {
         this.serverRef = serverRef;
@@ -31,8 +31,6 @@ class CheckHeartbeat extends TimerTask {
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-        } else {
-            System.out.println("Process Available");
         }
     }
 }

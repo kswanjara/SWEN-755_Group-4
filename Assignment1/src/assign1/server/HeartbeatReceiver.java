@@ -11,9 +11,9 @@ import java.util.Timer;
 
 public class HeartbeatReceiver extends UnicastRemoteObject implements CommunicationInterface {
 
-    private static Date lastUpdated;
-    private static boolean checkFlag = false;
-    private static Timer check_heartbeat = new Timer();
+    private Date lastUpdated;
+    private boolean checkFlag = false;
+    private Timer check_heartbeat = new Timer();
 
     @Override
     public Date getLastUpdated() {
@@ -22,9 +22,9 @@ public class HeartbeatReceiver extends UnicastRemoteObject implements Communicat
 
     @Override
     public void setCheckFlag(boolean checkFlag) {
-        HeartbeatReceiver.checkFlag = checkFlag;
+        this.checkFlag = checkFlag;
         if (!checkFlag) {
-            check_heartbeat.cancel();
+            this.check_heartbeat.cancel();
         }
     }
 
@@ -40,11 +40,10 @@ public class HeartbeatReceiver extends UnicastRemoteObject implements Communicat
         this.lastUpdated = lastUpdated;
         if (!this.checkFlag) {
             this.checkFlag = true;
-            check_heartbeat = new Timer();
-            check_heartbeat.schedule(new CheckHeartbeat(serverObj), 0, 4000);
+            this.check_heartbeat.schedule(new CheckHeartbeat(serverObj), 0, 4000);
         }
 
-        System.out.println("Newly updated time: " + lastUpdated);
+        System.out.println("New heartbeat time: " + lastUpdated);
     }
 
     protected HeartbeatReceiver() throws RemoteException {

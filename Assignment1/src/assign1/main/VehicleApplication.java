@@ -8,7 +8,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Timer;
 
-
 public class VehicleApplication {
 
     private static CommunicationInterface serverRef;
@@ -38,12 +37,11 @@ public class VehicleApplication {
         double maxLon = 180.00;
         double longitude = minLon + (double) (Math.random() * ((maxLon - minLon) + 1));
 
-        if (latitude > 89.8 && longitude < 0.2) {
+        if (latitude > 85.0 && longitude < 10.0) {
             System.out.println("Error in critical process");
             return false;
         }
-        System.out.println("Working fine!");
+        
         return true;
     }
-
 }
