@@ -13,14 +13,16 @@ public class HeartbeatReceiver extends UnicastRemoteObject implements Communicat
 
     private static Date lastUpdated;
 
-    public static void setCheckFlag(boolean checkFlag) {
+    @Override
+    public void setCheckFlag(boolean checkFlag) {
         HeartbeatReceiver.checkFlag = checkFlag;
     }
 
     private static boolean checkFlag = false;
     private static Timer check_heartbeat = new Timer();
 
-    public static Date getLastUpdated() {
+    @Override
+    public Date getLastUpdated() {
         return lastUpdated;
     }
 
@@ -45,7 +47,7 @@ public class HeartbeatReceiver extends UnicastRemoteObject implements Communicat
         System.out.println("Server ready");
 
         if (checkFlag) {
-            check_heartbeat.schedule(new CheckHeartbeat((HeartbeatReceiver) serverObj), 0, 5000);
+            check_heartbeat.schedule(new CheckHeartbeat(serverObj), 0, 5000);
         }
     }
 
