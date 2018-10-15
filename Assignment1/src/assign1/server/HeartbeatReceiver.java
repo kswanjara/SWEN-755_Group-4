@@ -33,7 +33,7 @@ public class HeartbeatReceiver extends UnicastRemoteObject implements Communicat
     }
 
     @Override
-    public void sendHeartbeat(Date lastUpdated) {
+    public void sendHeartbeat(Date lastUpdated, CommunicationInterface serverObj) {
         this.lastUpdated = lastUpdated;
         if(!this.checkFlag){
             this.checkFlag = true;
