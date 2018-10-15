@@ -23,6 +23,9 @@ public class HeartbeatReceiver extends UnicastRemoteObject implements Communicat
     @Override
     public void setCheckFlag(boolean checkFlag) {
         HeartbeatReceiver.checkFlag = checkFlag;
+        if (!checkFlag) {
+            check_heartbeat.cancel();
+        }
     }
 
     @Override
@@ -35,8 +38,9 @@ public class HeartbeatReceiver extends UnicastRemoteObject implements Communicat
     @Override
     public void sendHeartbeat(Date lastUpdated, CommunicationInterface serverObj) {
         this.lastUpdated = lastUpdated;
-        if(!this.checkFlag){
+        if (!this.checkFlag) {
             this.checkFlag = true;
+            check_heartbeat = new Timer();
             check_heartbeat.schedule(new CheckHeartbeat(serverObj), 0, 4000);
         }
 

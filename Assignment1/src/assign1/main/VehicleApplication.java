@@ -38,11 +38,11 @@ public class VehicleApplication {
         double maxLon = 180.00;
         double longitude = minLon + (double) (Math.random() * ((maxLon - minLon) + 1));
 
-        if (latitude > 80 || longitude < 20) {
+        if (latitude > 89.8 && longitude < 0.2) {
             System.out.println("Error in critical process");
             return false;
         }
-
+        System.out.println("Working fine!");
         return true;
     }
 
