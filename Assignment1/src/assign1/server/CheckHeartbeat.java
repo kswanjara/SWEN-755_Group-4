@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.TimerTask;
 
 class CheckHeartbeat extends TimerTask {
-    private static final int expirationTime = 15;
+    private final int expirationTime = 15;
     private static CommunicationInterface serverRef;
 
     CheckHeartbeat(CommunicationInterface serverRef) {

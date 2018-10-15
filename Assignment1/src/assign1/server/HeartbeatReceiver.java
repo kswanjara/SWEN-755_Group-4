@@ -12,12 +12,6 @@ import java.util.Timer;
 public class HeartbeatReceiver extends UnicastRemoteObject implements CommunicationInterface {
 
     private static Date lastUpdated;
-
-    @Override
-    public void setCheckFlag(boolean checkFlag) {
-        HeartbeatReceiver.checkFlag = checkFlag;
-    }
-
     private static boolean checkFlag = false;
     private static Timer check_heartbeat = new Timer();
 
@@ -26,8 +20,9 @@ public class HeartbeatReceiver extends UnicastRemoteObject implements Communicat
         return lastUpdated;
     }
 
-    protected HeartbeatReceiver() throws RemoteException {
-        super();
+    @Override
+    public void setCheckFlag(boolean checkFlag) {
+        HeartbeatReceiver.checkFlag = checkFlag;
     }
 
     @Override
@@ -35,6 +30,21 @@ public class HeartbeatReceiver extends UnicastRemoteObject implements Communicat
         System.out.println("Message from client : " + connectionMessage);
 
         return "Hello from server!";
+    }
+
+    @Override
+    public void sendHeartbeat(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+        if(!this.checkFlag){
+            this.checkFlag = true;
+            check_heartbeat.schedule(new CheckHeartbeat(serverObj), 0, 4000);
+        }
+
+        System.out.println("Newly updated time: " + lastUpdated);
+    }
+
+    protected HeartbeatReceiver() throws RemoteException {
+        super();
     }
 
     public static void main(String[] args) throws RemoteException {
@@ -45,17 +55,5 @@ public class HeartbeatReceiver extends UnicastRemoteObject implements Communicat
         registry.rebind("ServerReference", serverObj);
 
         System.out.println("Server ready");
-
-        if (checkFlag) {
-            check_heartbeat.schedule(new CheckHeartbeat(serverObj), 0, 5000);
-        }
     }
-
-    @Override
-    public void sendHeartbeat(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
-        this.checkFlag = true;
-        System.out.println("Newly updated time: " + lastUpdated);
-    }
-
 }

@@ -16,7 +16,7 @@ class Heartbeat extends TimerTask {
 
     public void run() {
         try {
-            serverRef.sendHeartbeat(new Date());
+            serverRef.sendHeartbeat(new Date(), serverRef);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

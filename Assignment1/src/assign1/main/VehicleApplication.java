@@ -10,21 +10,18 @@ import java.util.Timer;
 
 
 public class VehicleApplication {
+
     private static CommunicationInterface serverRef;
-
-    private static boolean keepNotifying = true;
-
     private static Timer timer_heartbeat = new Timer();
 
     public static void main(String[] args) throws RemoteException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry("localhost", 8888);
         serverRef = (CommunicationInterface) registry.lookup("ServerReference");
 
-        timer_heartbeat.schedule(new Heartbeat(serverRef), 0, 12000);
+        timer_heartbeat.schedule(new Heartbeat(serverRef), 0, 6000);
 
         boolean validCoordinates = true;
         while (validCoordinates) {
-            System.out.println("gibberish");
             if (!getCoordinates()) {
                 validCoordinates = false;
                 timer_heartbeat.cancel();
@@ -42,6 +39,7 @@ public class VehicleApplication {
         double longitude = minLon + (double) (Math.random() * ((maxLon - minLon) + 1));
 
         if (latitude > 80 || longitude < 20) {
+            System.out.println("Error in critical process");
             return false;
         }
 
@@ -49,5 +47,3 @@ public class VehicleApplication {
     }
 
 }
-
-
