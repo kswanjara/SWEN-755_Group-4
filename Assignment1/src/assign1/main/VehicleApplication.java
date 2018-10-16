@@ -64,8 +64,6 @@ public class VehicleApplication {
         if (latitude > 89.8 && longitude < 0.2) {
             System.out.println("Error in critical process");
             return false;
-        }else{
-            System.out.println("Working fine!");
         }
 
         return true;

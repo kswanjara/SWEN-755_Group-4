@@ -25,7 +25,7 @@ class CheckHeartbeat extends TimerTask {
         }
 
         if (current_time - last_updated >= this.expirationTime) {
-            System.out.println("PROCESS NOT AVAILABLE ABORTING");
+            System.out.println("PROCESS NOT AVAILABLE - timeout of " + this.expirationTime + " seconds");
             try {
                 serverRef.setCheckFlag(false);
             } catch (RemoteException e) {

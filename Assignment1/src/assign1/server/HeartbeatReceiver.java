@@ -40,7 +40,6 @@ public class HeartbeatReceiver extends UnicastRemoteObject implements Communicat
         this.lastUpdated = lastUpdated;
         if (!this.checkFlag) {
             this.checkFlag = true;
-            this.check_heartbeat = new Timer();
             this.check_heartbeat.schedule(new CheckHeartbeat(serverObj), 0, 1000);
         }
 
