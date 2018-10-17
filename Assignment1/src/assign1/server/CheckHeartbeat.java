@@ -8,6 +8,7 @@ import java.util.TimerTask;
 
 class CheckHeartbeat extends TimerTask {
     private final int expirationTime = 5;
+    private final int checkingInterval = 1;
     private CommunicationInterface serverRef;
 
     CheckHeartbeat(CommunicationInterface serverRef) {
@@ -32,7 +33,11 @@ class CheckHeartbeat extends TimerTask {
                 e.printStackTrace();
             }
         }else{
-            System.out.println((current_time - last_updated) + " seconds since last update, checking again in ( 1 ) second....");
+            System.out.println((current_time - last_updated) + " seconds since last update, checking again in ( " + this.checkingInterval + " ) second....");
         }
+    }
+
+    public int getCheckingInterval(){
+        return this.checkingInterval * 1000;
     }
 }
