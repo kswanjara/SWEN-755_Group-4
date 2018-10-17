@@ -1,13 +1,4 @@
-# SWEN-755_Group-4
-
 # Assignment 1
-
-## Group Members
-* Andrew DiStasi
-* Jan Guillermo
-* Jeff Palmerino
-* Kunal Shirish Wanjara 
-
 
 ## Class Diagram
 ![Class Diagram](http://andydistasi.com/dev/755Models/Heartbeat%20Class%20Diagram%20-%20Version%202.png)
