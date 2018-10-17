@@ -1,4 +1,4 @@
-# SWEN-755_Group-4
+# SWEN-755: Group 4
 This repository will be used for the assignments and the final project for this course. 
 
 ## Group Members
