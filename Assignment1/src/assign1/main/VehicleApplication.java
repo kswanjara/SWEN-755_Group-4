@@ -1,7 +1,6 @@
 package assign1.main;
 
 import assign1.common.CommunicationInterface;
-import com.sun.xml.internal.ws.api.message.ExceptionHasMessage;
 
 import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
