@@ -13,7 +13,7 @@ public class HeartbeatReceiver extends UnicastRemoteObject implements Communicat
 
     private Date lastUpdated;
     private boolean checkFlag = false;
-    private Timer check_heartbeat = new Timer();
+    private Timer check_heartbeat;
 
     @Override
     public Date getLastUpdated() {
@@ -40,8 +40,9 @@ public class HeartbeatReceiver extends UnicastRemoteObject implements Communicat
         this.lastUpdated = lastUpdated;
         if (!this.checkFlag) {
             this.checkFlag = true;
+            CheckHeartbeat chb = new CheckHeartbeat(serverObj);
             this.check_heartbeat = new Timer();
-            this.check_heartbeat.schedule(new CheckHeartbeat(serverObj), 0, 1000);
+            this.check_heartbeat.schedule(chb, 0, chb.getCheckingInterval());
         }
 
         System.out.println("New heartbeat time: " + lastUpdated);
