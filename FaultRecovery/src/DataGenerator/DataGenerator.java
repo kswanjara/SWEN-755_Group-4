@@ -26,7 +26,8 @@ public class DataGenerator implements Runnable {
             primaryRef = (ClientCommunicationInterface) registry.lookup(primaryProcess);
             backupRef = (ClientCommunicationInterface) registry.lookup(backupProcess);
 
-
+            Thread t = new Thread(new DataGenerator());
+            t.start();
         } catch (ConnectException e) {
             System.out.println("Processes not available is not available!");
             System.exit(-1);
@@ -48,7 +49,7 @@ public class DataGenerator implements Runnable {
     }
 
 
-    public static boolean getCoordinates() throws RemoteException {
+    public static boolean getCoordinates() throws IOException {
         double minLat = -90.00;
         double maxLat = 90.00;
         double latitude = minLat + (double) (Math.random() * ((maxLat - minLat) + 1));
@@ -71,6 +72,8 @@ public class DataGenerator implements Runnable {
         } catch (RemoteException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

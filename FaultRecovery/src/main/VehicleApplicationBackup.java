@@ -81,12 +81,6 @@ public class VehicleApplicationBackup extends UnicastRemoteObject implements Cli
             System.out.println("Exception occurred! Not sending heartbeat anymore!");
             e.printStackTrace();
         }
-
-    }
-
-    @Override
-    public void sendData(boolean flag) throws RemoteException {
-
     }
 
     @Override
@@ -105,7 +99,18 @@ public class VehicleApplicationBackup extends UnicastRemoteObject implements Cli
             writer.write(current + "\tLatitude = " + latitude + "\tLongitude = " + longitude);
             writer.close();
         } else {
+            //Send data to server
 
         }
+    }
+
+    @Override
+    public Date getPrimaryLastUpdated() throws RemoteException {
+        return lastUpdate;
+    }
+
+    @Override
+    public void setActiveFlag(boolean b) throws RemoteException {
+        active = true;
     }
 }

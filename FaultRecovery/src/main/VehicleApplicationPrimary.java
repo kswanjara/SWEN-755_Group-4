@@ -83,11 +83,6 @@ public class VehicleApplicationPrimary extends UnicastRemoteObject implements Cl
     }
 
     @Override
-    public void sendData(boolean flag) throws RemoteException {
-
-    }
-
-    @Override
     public void aliveStatus(Date statusTime, long dataPointer) throws RemoteException {
 
     }
@@ -104,5 +99,15 @@ public class VehicleApplicationPrimary extends UnicastRemoteObject implements Cl
             counter.getAndIncrement();
             backupRef.aliveStatus(new Date(), current);
         }
+    }
+
+    @Override
+    public Date getPrimaryLastUpdated() throws RemoteException {
+        return new Date();
+    }
+
+    @Override
+    public void setActiveFlag(boolean b) throws RemoteException {
+
     }
 }
