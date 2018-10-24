@@ -30,8 +30,8 @@ public class VehicleApplicationBackup extends UnicastRemoteObject implements Cli
 
     private static File file = new File("./CriticalData.txt");
 
-    private static long primaryProcess = counter.longValue();
-    private static Date lastUpdate;
+    private long primaryProcess = counter.longValue();
+    private Date lastUpdate;
 
     protected VehicleApplicationBackup() throws RemoteException {
         super();
@@ -66,8 +66,15 @@ public class VehicleApplicationBackup extends UnicastRemoteObject implements Cli
         }
 
         try {
-            timer_heartbeat.schedule(new Heartbeat(serverRef, counter), 0, 400);
+            timer_heartbeat.schedule(new Heartbeat(serverRef, counter, 0), 0, 400);
             boolean validCoordinates = true;
+
+            while (validCoordinates) {
+                if (!getCoordinates()) {
+                    validCoordinates = false;
+                    timer_heartbeat.cancel();
+                }
+            }
 
         } catch (Exception e) {
             timer_heartbeat.cancel();
@@ -84,8 +91,8 @@ public class VehicleApplicationBackup extends UnicastRemoteObject implements Cli
 
     @Override
     public void aliveStatus(Date statusTime, long dataPointer) throws RemoteException {
-        lastUpdate = statusTime;
-        primaryProcess = dataPointer;
+        this.lastUpdate = statusTime;
+        this.primaryProcess = dataPointer;
     }
 
     @Override

@@ -11,5 +11,5 @@ public interface ServerCommunicationInterface extends Remote {
 
     public String connectToServer(String connectionMessage) throws RemoteException;
 
-    public void sendHeartbeat(Date lastUpdated, long serverRef) throws RemoteException;
+    public void sendHeartbeat(Date lastUpdated, long serverRef, int processNumber) throws RemoteException;
 }

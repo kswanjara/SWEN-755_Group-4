@@ -14,7 +14,9 @@ import java.util.Timer;
 
 public class ServerManager extends UnicastRemoteObject implements ServerCommunicationInterface {
 
-    private Date lastUpdated;
+    private Date primary_lastUpdated;
+    private Date backup_primary;
+
     private boolean checkFlag = false;
     private Timer check_heartbeat = new Timer();
     private static Properties props;
@@ -32,8 +34,12 @@ public class ServerManager extends UnicastRemoteObject implements ServerCommunic
     }
 
     @Override
-    public Date getLastUpdated() {
-        return lastUpdated;
+    public Date getLastUpdated(int processNumber) {
+        if(processNumber == 1){
+            return this.primary_lastUpdated;
+        }else{
+            return this.backup_primary;
+        }
     }
 
     @Override
@@ -52,12 +58,19 @@ public class ServerManager extends UnicastRemoteObject implements ServerCommunic
     }
 
     @Override
-    public void sendHeartbeat(Date lastUpdated, long serverObj) {
-        this.lastUpdated = lastUpdated;
+    public void sendHeartbeat(Date lastUpdated, long serverObj, int processNumber) {
+
+        //check to see if the heartbeat is coming from the primary process - 1 or the back up process - 0
+        if(process == 1){
+            this.primary_lastUpdated = lastUpdated;
+        }else{
+            this.backup_primary = last_updated;
+        }
+
         if (!this.checkFlag) {
             this.checkFlag = true;
             this.check_heartbeat = new Timer();
-            this.check_heartbeat.schedule(new CheckHeartbeat(this), 0, 1000);
+            this.check_heartbeat.schedule(new CheckHeartbeat(this, processNumber), 0, 1000);
         }
 
         System.out.println("New heartbeat time: " + lastUpdated);

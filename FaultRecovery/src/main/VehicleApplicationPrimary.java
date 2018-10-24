@@ -69,7 +69,7 @@ public class VehicleApplicationPrimary extends UnicastRemoteObject implements Cl
         }
 
         try {
-            timer_heartbeat.schedule(new Heartbeat(serverRef, counter), 0, 400);
+            timer_heartbeat.schedule(new Heartbeat(serverRef, counter, 1), 0, 400);
 
             while (validCoordinates) {
                 timer_heartbeat.cancel();
@@ -99,7 +99,7 @@ public class VehicleApplicationPrimary extends UnicastRemoteObject implements Cl
 
         if (latitude > 89.8 && longitude < 0.2) {
             System.out.println("Error in critical process");
-            this.validCoordinates = false;
+            validCoordinates = false;
         } else {
             counter.getAndIncrement();
             backupRef.aliveStatus(new Date(), current);
