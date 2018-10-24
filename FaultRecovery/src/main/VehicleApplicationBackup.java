@@ -4,7 +4,7 @@ import DataGenerator.DataGenerator;
 import common.ClientCommunicationInterface;
 import common.ServerCommunicationInterface;
 
-import java.io.IOException;
+import java.io.*;
 import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -13,6 +13,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Date;
 import java.util.Properties;
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -26,6 +27,11 @@ public class VehicleApplicationBackup extends UnicastRemoteObject implements Cli
 
     private static boolean active = false;
     private static AtomicLong counter = new AtomicLong(0L);
+
+    private static File file = new File("./CriticalData.txt");
+
+    private static long primaryProcess = counter.longValue();
+    private static Date lastUpdate;
 
     protected VehicleApplicationBackup() throws RemoteException {
         super();
@@ -60,7 +66,7 @@ public class VehicleApplicationBackup extends UnicastRemoteObject implements Cli
         }
 
         try {
-            timer_heartbeat.schedule(new Heartbeat(serverRef), 0, 400);
+            timer_heartbeat.schedule(new Heartbeat(serverRef, counter), 0, 400);
             boolean validCoordinates = true;
 
         } catch (Exception e) {
@@ -78,14 +84,20 @@ public class VehicleApplicationBackup extends UnicastRemoteObject implements Cli
 
     @Override
     public void aliveStatus(Date statusTime, long dataPointer) throws RemoteException {
-
+        lastUpdate = statusTime;
+        primaryProcess = dataPointer;
     }
 
     @Override
-    public void collectData(double latitude, double longitude) throws RemoteException {
+    public void collectData(double latitude, double longitude) throws IOException {
         if (!active) {
             long current = counter.longValue();
             counter.getAndIncrement();
+            file.setWritable(true);
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            writer.write(current + "\tLatitude = " + latitude + "\tLongitude = " + longitude);
+            writer.close();
+        } else {
 
         }
     }

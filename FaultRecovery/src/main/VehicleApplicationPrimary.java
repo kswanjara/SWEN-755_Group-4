@@ -16,8 +16,6 @@ import java.util.Properties;
 import java.util.Timer;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static DataGenerator.DataGenerator.getCoordinates;
-
 public class VehicleApplicationPrimary extends UnicastRemoteObject implements ClientCommunicationInterface {
 
     private static ServerCommunicationInterface serverRef;
@@ -71,7 +69,7 @@ public class VehicleApplicationPrimary extends UnicastRemoteObject implements Cl
         }
 
         try {
-            timer_heartbeat.schedule(new Heartbeat(serverRef), 0, 400);
+            timer_heartbeat.schedule(new Heartbeat(serverRef, counter), 0, 400);
 
             while (validCoordinates) {
                 timer_heartbeat.cancel();
