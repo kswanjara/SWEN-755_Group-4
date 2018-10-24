@@ -2,6 +2,7 @@ package main;
 
 import DataGenerator.DataGenerator;
 import common.ClientCommunicationInterface;
+import common.ProcessManagerInterface;
 import common.ServerCommunicationInterface;
 
 import java.io.*;
@@ -33,6 +34,9 @@ public class VehicleApplicationBackup extends UnicastRemoteObject implements Cli
     private long primaryProcess = counter.longValue();
     private Date lastUpdate;
 
+
+    private static ProcessManagerInterface pmanagerRef;
+
     protected VehicleApplicationBackup() throws RemoteException {
         super();
     }
@@ -42,8 +46,11 @@ public class VehicleApplicationBackup extends UnicastRemoteObject implements Cli
      */
     private static void loadProperties() {
         try {
+            InputStream is;
+            is = VehicleApplicationBackup.class.getClassLoader().getResourceAsStream("application.properties");
             props = new Properties();
-            props.load(DataGenerator.class.getClassLoader().getResourceAsStream("application.properties"));
+            props.load(is);
+            is.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -51,6 +58,16 @@ public class VehicleApplicationBackup extends UnicastRemoteObject implements Cli
 
     public static void main(String[] args) throws RemoteException, NotBoundException {
         try {
+            loadProperties();
+
+            String backupIp = props.getProperty("vehicle.app.ip");
+            String backupPort = props.getProperty("vehicle.app.port2");
+
+            String backupReference = props.getProperty("backup.process.reference");
+            Registry reg = LocateRegistry.createRegistry(Integer.parseInt(backupPort));
+            reg.rebind(backupReference, new VehicleApplicationBackup());
+
+
             String serverIp = props.getProperty("server.ip");
             String serverPort = props.getProperty("server.port");
             String serverReference = props.getProperty("server.reference");
@@ -67,20 +84,22 @@ public class VehicleApplicationBackup extends UnicastRemoteObject implements Cli
 
         try {
             timer_heartbeat.schedule(new Heartbeat(serverRef, counter, 0), 0, 400);
-            boolean validCoordinates = true;
-
-            while (validCoordinates) {
-                if (!getCoordinates()) {
-                    validCoordinates = false;
-                    timer_heartbeat.cancel();
-                }
-            }
-
         } catch (Exception e) {
             timer_heartbeat.cancel();
             System.out.println("Exception occurred! Not sending heartbeat anymore!");
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void processManagerUp() throws RemoteException, NotBoundException {
+        String thirdCompIP = props.getProperty("third.component.ip");
+        int thirdCompPort = Integer.parseInt(props.getProperty("third.component.port"));
+        String thirdCompReference = props.getProperty("third.component.reference");
+
+        Registry registry1 = LocateRegistry.getRegistry(thirdCompIP, thirdCompPort);
+        pmanagerRef = (ProcessManagerInterface) registry1.lookup(thirdCompReference);
+
     }
 
     @Override
@@ -91,8 +110,8 @@ public class VehicleApplicationBackup extends UnicastRemoteObject implements Cli
 
     @Override
     public void collectData(double latitude, double longitude) throws IOException {
+        long current = counter.longValue();
         if (!active) {
-            long current = counter.longValue();
             counter.getAndIncrement();
             file.setWritable(true);
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
@@ -100,7 +119,8 @@ public class VehicleApplicationBackup extends UnicastRemoteObject implements Cli
             writer.close();
         } else {
             //Send data to server
-
+            counter.getAndIncrement();
+            pmanagerRef.handleData(current, latitude, longitude);
         }
     }
 

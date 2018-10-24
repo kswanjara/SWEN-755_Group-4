@@ -1,9 +1,12 @@
 package server;
 
 import DataGenerator.DataGenerator;
+import common.ProcessManagerInterface;
 import common.ServerCommunicationInterface;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -20,14 +23,18 @@ public class ServerManager extends UnicastRemoteObject implements ServerCommunic
     private boolean checkFlag = false;
     private Timer check_heartbeat = new Timer();
     private static Properties props;
+    private static ProcessManagerInterface pmanagerRef;
 
     /**
      * This method loads the properties of application.
      */
     private static void loadProperties() {
         try {
+            InputStream is;
+            is = ServerManager.class.getClassLoader().getResourceAsStream("application.properties");
             props = new Properties();
-            props.load(DataGenerator.class.getClassLoader().getResourceAsStream("application.properties"));
+            props.load(is);
+            is.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -35,9 +42,9 @@ public class ServerManager extends UnicastRemoteObject implements ServerCommunic
 
     @Override
     public Date getLastUpdated(int processNumber) {
-        if(processNumber == 1){
+        if (processNumber == 1) {
             return this.primary_lastUpdated;
-        }else{
+        } else {
             return this.backup_primary;
         }
     }
@@ -60,16 +67,16 @@ public class ServerManager extends UnicastRemoteObject implements ServerCommunic
     public void sendHeartbeat(Date lastUpdated, long serverObj, int processNumber) {
 
         //check to see if the heartbeat is coming from the primary process - 1 or the back up process - 0
-        if(process == 1){
+        if (processNumber == 1) {
             this.primary_lastUpdated = lastUpdated;
-        }else{
-            this.backup_primary = last_updated;
+        } else {
+            this.backup_primary = lastUpdated;
         }
 
         if (!this.checkFlag) {
             this.checkFlag = true;
             this.check_heartbeat = new Timer();
-            this.check_heartbeat.schedule(new CheckHeartbeat(this, processNumber), 0, 1000);
+            this.check_heartbeat.schedule(new CheckHeartbeat(this, processNumber, pmanagerRef), 0, 1000);
         }
 
         System.out.println("New heartbeat time: " + lastUpdated);
@@ -79,7 +86,21 @@ public class ServerManager extends UnicastRemoteObject implements ServerCommunic
         super();
     }
 
-    public static void main(String[] args) throws RemoteException {
+    @Override
+    public void processManagerUp() throws RemoteException, NotBoundException {
+        String thirdCompIP = props.getProperty("third.component.ip");
+        int thirdCompPort = Integer.parseInt(props.getProperty("third.component.port"));
+        String thirdCompReference = props.getProperty("third.component.reference");
+
+
+        Registry registry1 = LocateRegistry.getRegistry(thirdCompIP, thirdCompPort);
+        pmanagerRef = (ProcessManagerInterface) registry1.lookup(thirdCompReference);
+
+    }
+
+    public static void main(String[] args) throws RemoteException, NotBoundException {
+        loadProperties();
+
         ServerCommunicationInterface serverObj = new ServerManager();
         int portNumber = 8888;
 

@@ -1,6 +1,7 @@
 package server;
 
-import assign1.common.CommunicationInterface;
+import common.ProcessManagerInterface;
+import common.ServerCommunicationInterface;
 
 import java.rmi.RemoteException;
 import java.util.Date;
@@ -10,12 +11,14 @@ class CheckHeartbeat extends TimerTask {
     private final int expirationTime = 5;
     private final int checkingInterval = 1;
     private int processNumber;
+    private ProcessManagerInterface pmanagerRef;
 
-    private CommunicationInterface serverRef;
+    private ServerCommunicationInterface serverRef;
 
-    CheckHeartbeat(CommunicationInterface serverRef, int processNumber) {
+    CheckHeartbeat(ServerCommunicationInterface serverRef, int processNumber, ProcessManagerInterface pmanagerRef) {
         this.serverRef = serverRef;
         this.processNumber = processNumber;
+        this.pmanagerRef = pmanagerRef;
     }
 
     public void run() {
@@ -34,11 +37,16 @@ class CheckHeartbeat extends TimerTask {
         int fail = -1;
         if (current_time - primary_last_updated >= this.expirationTime) {
             fail = 1;
-        }else if(current_time - backup_last_updated >= this.expirationTime){
+            try {
+                pmanagerRef.useBackup(true);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        } else if (current_time - backup_last_updated >= this.expirationTime) {
             fail = 0;
         }
 
-        if(fail > 0){
+        if (fail >= 0) {
             System.out.println("PROCESS " + fail + " NOT AVAILABLE - timeout of " + this.expirationTime + " seconds");
             try {
                 serverRef.setCheckFlag(false);
@@ -47,11 +55,11 @@ class CheckHeartbeat extends TimerTask {
             }
             return;
         }
-        
-        System.out.println((current_time - last_updated) + " seconds since last update, checking again in ( " + this.checkingInterval + " ) second....");
+
+//        System.out.println((current_time - last_updated) + " seconds since last update, checking again in ( " + this.checkingInterval + " ) second....");
     }
 
-    public int getCheckingInterval(){
+    public int getCheckingInterval() {
         return this.checkingInterval * 1000;
     }
 }

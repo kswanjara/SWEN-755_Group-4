@@ -4,6 +4,7 @@ import common.ClientCommunicationInterface;
 import common.ServerCommunicationInterface;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -18,13 +19,17 @@ public class DataGenerator implements Runnable {
     static ClientCommunicationInterface backupRef;
 
     public static void main(String[] args) {
+        loadProperties();
+
         String primaryProcess = props.getProperty("primary.process.reference");
         String backupProcess = props.getProperty("backup.process.reference");
 
         try {
-            Registry registry = LocateRegistry.getRegistry("localhost", 8888);
+            Registry registry = LocateRegistry.getRegistry(props.getProperty("vehicle.app.ip"), Integer.parseInt(props.getProperty("vehicle.app.port1")));
             primaryRef = (ClientCommunicationInterface) registry.lookup(primaryProcess);
-            backupRef = (ClientCommunicationInterface) registry.lookup(backupProcess);
+
+            Registry registry1 = LocateRegistry.getRegistry(props.getProperty("vehicle.app.ip"), Integer.parseInt(props.getProperty("vehicle.app.port2")));
+            backupRef = (ClientCommunicationInterface) registry1.lookup(backupProcess);
 
             Thread t = new Thread(new DataGenerator());
             t.start();
@@ -41,8 +46,11 @@ public class DataGenerator implements Runnable {
      */
     private static void loadProperties() {
         try {
+            InputStream is;
+            is = DataGenerator.class.getClassLoader().getResourceAsStream("application.properties");
             props = new Properties();
-            props.load(DataGenerator.class.getClassLoader().getResourceAsStream("application.properties"));
+            props.load(is);
+            is.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
