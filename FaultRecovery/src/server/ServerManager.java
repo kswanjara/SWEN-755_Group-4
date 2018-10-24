@@ -47,7 +47,6 @@ public class ServerManager extends UnicastRemoteObject implements ServerCommunic
     @Override
     public String connectToServer(String connectionMessage) throws RemoteException {
         System.out.println("Message from client : " + connectionMessage);
-
         return "Hello from server!";
     }
 
@@ -75,5 +74,7 @@ public class ServerManager extends UnicastRemoteObject implements ServerCommunic
         registry.rebind("ServerReference", serverObj);
 
         System.out.println("Server ready");
+
+
     }
 }
