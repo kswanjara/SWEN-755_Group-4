@@ -84,14 +84,6 @@ public class VehicleApplicationPrimary extends UnicastRemoteObject implements Cl
             e.printStackTrace();
         }
 
-        try {
-            timer_heartbeat.schedule(new Heartbeat(serverRef, counter, 1), 0, 400);
-        } catch (Exception e) {
-            timer_heartbeat.cancel();
-            System.out.println("Exception occurred! Not sending heartbeat anymore!");
-            e.printStackTrace();
-        }
-
     }
 
     @Override
@@ -116,7 +108,18 @@ public class VehicleApplicationPrimary extends UnicastRemoteObject implements Cl
         long current = counter.longValue();
         //send data to server as well
 
-        if (latitude > 89.8 && longitude < 0.2) {
+        if (current == 0) {
+            try {
+                timer_heartbeat.schedule(new Heartbeat(serverRef, counter, 1), 0, 400);
+            } catch (Exception e) {
+                timer_heartbeat.cancel();
+                System.out.println("Exception occurred! Not sending heartbeat anymore!");
+                e.printStackTrace();
+            }
+
+        }
+
+        if (latitude > 80.0 || longitude < 10.0) {
             System.out.println("Error in critical process");
             validCoordinates = false;
             timer_heartbeat.cancel();

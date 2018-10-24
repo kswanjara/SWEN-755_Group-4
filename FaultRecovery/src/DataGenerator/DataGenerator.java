@@ -18,6 +18,8 @@ public class DataGenerator implements Runnable {
     static ClientCommunicationInterface primaryRef;
     static ClientCommunicationInterface backupRef;
 
+    static boolean isPrimaryAvailable = true;
+
     public static void main(String[] args) {
         loadProperties();
 
@@ -31,8 +33,11 @@ public class DataGenerator implements Runnable {
             Registry registry1 = LocateRegistry.getRegistry(props.getProperty("vehicle.app.ip"), Integer.parseInt(props.getProperty("vehicle.app.port2")));
             backupRef = (ClientCommunicationInterface) registry1.lookup(backupProcess);
 
-            Thread t = new Thread(new DataGenerator());
-            t.start();
+            while (true) {
+                Thread t = new Thread(new DataGenerator());
+                t.start();
+            }
+
         } catch (ConnectException e) {
             System.out.println("Processes not available is not available!");
             System.exit(-1);
@@ -66,8 +71,19 @@ public class DataGenerator implements Runnable {
         double maxLon = 180.00;
         double longitude = minLon + (double) (Math.random() * ((maxLon - minLon) + 1));
 
-        primaryRef.collectData(latitude, longitude);
-        backupRef.collectData(latitude, longitude);
+        if (isPrimaryAvailable) {
+            try {
+                primaryRef.collectData(latitude, longitude);
+            } catch (Exception e) {
+                isPrimaryAvailable = false;
+                System.out.println("No Primary process available!");
+            }
+        }
+        try {
+            backupRef.collectData(latitude, longitude);
+        } catch (Exception e) {
+            System.out.println("No backup process available!");
+        }
 
         return true;
     }

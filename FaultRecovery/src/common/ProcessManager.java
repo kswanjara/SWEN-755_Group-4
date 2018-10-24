@@ -89,7 +89,7 @@ public class ProcessManager extends UnicastRemoteObject implements ProcessManage
 
     @Override
     public void handleData(long counter, double latitude, double longitude) throws RemoteException {
-        System.out.println(counter + " " + latitude + " " + longitude);
+        System.out.println("Process in use : " + (useBackup ? "Backup" : "Primary") + counter + " " + latitude + " " + longitude);
     }
 
 

@@ -82,13 +82,6 @@ public class VehicleApplicationBackup extends UnicastRemoteObject implements Cli
             e.printStackTrace();
         }
 
-        try {
-            timer_heartbeat.schedule(new Heartbeat(serverRef, counter, 0), 0, 400);
-        } catch (Exception e) {
-            timer_heartbeat.cancel();
-            System.out.println("Exception occurred! Not sending heartbeat anymore!");
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -111,6 +104,17 @@ public class VehicleApplicationBackup extends UnicastRemoteObject implements Cli
     @Override
     public void collectData(double latitude, double longitude) throws IOException {
         long current = counter.longValue();
+
+        if (current == 0) {
+            try {
+                timer_heartbeat.schedule(new Heartbeat(serverRef, counter, 0), 0, 400);
+            } catch (Exception e) {
+                timer_heartbeat.cancel();
+                System.out.println("Exception occurred! Not sending heartbeat anymore!");
+                e.printStackTrace();
+            }
+        }
+
         if (!active) {
             counter.getAndIncrement();
             file.setWritable(true);
