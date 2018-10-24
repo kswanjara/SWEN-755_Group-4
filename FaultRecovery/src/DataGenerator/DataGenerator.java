@@ -1,14 +1,38 @@
 package DataGenerator;
 
+import common.ClientCommunicationInterface;
+import common.ServerCommunicationInterface;
+
 import java.io.IOException;
+import java.rmi.ConnectException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.Properties;
 
-public class DataGenerator {
+public class DataGenerator implements Runnable {
 
     private static Properties props;
 
-    public static void main(String[] args) {
+    static ClientCommunicationInterface primaryRef;
+    static ClientCommunicationInterface backupRef;
 
+    public static void main(String[] args) {
+        String primaryProcess = props.getProperty("primary.process.reference");
+        String backupProcess = props.getProperty("backup.process.reference");
+
+        try {
+            Registry registry = LocateRegistry.getRegistry("localhost", 8888);
+            primaryRef = (ClientCommunicationInterface) registry.lookup(primaryProcess);
+            backupRef = (ClientCommunicationInterface) registry.lookup(backupProcess);
+
+
+        } catch (ConnectException e) {
+            System.out.println("Processes not available is not available!");
+            System.exit(-1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -24,7 +48,7 @@ public class DataGenerator {
     }
 
 
-    public static boolean getCoordinates() {
+    public static boolean getCoordinates() throws RemoteException {
         double minLat = -90.00;
         double maxLat = 90.00;
         double latitude = minLat + (double) (Math.random() * ((maxLat - minLat) + 1));
@@ -33,13 +57,22 @@ public class DataGenerator {
         double maxLon = 180.00;
         double longitude = minLon + (double) (Math.random() * ((maxLon - minLon) + 1));
 
-        if (latitude > 89.8 && longitude < 0.2) {
-            System.out.println("Error in critical process");
-            return false;
-        } else {
-            System.out.println("Working fine!");
-        }
+        primaryRef.collectData(latitude, longitude);
+        backupRef.collectData(latitude, longitude);
 
         return true;
+    }
+
+    @Override
+    public void run() {
+        try {
+            getCoordinates();
+            Thread.sleep(2000);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 }
