@@ -6,7 +6,9 @@ import java.rmi.RemoteException;
 import java.util.Date;
 
 public interface ServerCommunicationInterface extends Remote {
-    void setCheckFlag(boolean checkFlag) throws RemoteException;
+    void setPrimaryCheckFlag(boolean checkFlag) throws RemoteException;
+
+    void setBackupCheckFlag(boolean checkFlag) throws RemoteException;
 
     Date getLastUpdated(int processNumber) throws RemoteException;
 

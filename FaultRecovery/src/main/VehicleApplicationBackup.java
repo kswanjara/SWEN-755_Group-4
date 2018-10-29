@@ -75,6 +75,8 @@ public class VehicleApplicationBackup extends UnicastRemoteObject implements Cli
             Registry registry = LocateRegistry.getRegistry(serverIp, Integer.parseInt(serverPort));
             serverRef = (ServerCommunicationInterface) registry.lookup(serverReference);
 
+
+            System.out.println("Backup process ready!");
         } catch (ConnectException e) {
             System.out.println("Server is not available!");
             System.exit(-1);
@@ -107,7 +109,7 @@ public class VehicleApplicationBackup extends UnicastRemoteObject implements Cli
 
         if (current == 0) {
             try {
-                timer_heartbeat.schedule(new Heartbeat(serverRef, counter, 0), 0, 400);
+                timer_heartbeat.schedule(new Heartbeat(serverRef, counter, 0), 0, 2000);
             } catch (Exception e) {
                 timer_heartbeat.cancel();
                 System.out.println("Exception occurred! Not sending heartbeat anymore!");
@@ -136,5 +138,6 @@ public class VehicleApplicationBackup extends UnicastRemoteObject implements Cli
     @Override
     public void setActiveFlag(boolean b) throws RemoteException {
         active = true;
+        System.out.println("Sending data from backup server! Will start from counter : " + primaryProcess);
     }
 }

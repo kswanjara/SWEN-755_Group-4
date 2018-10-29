@@ -77,6 +77,8 @@ public class VehicleApplicationPrimary extends UnicastRemoteObject implements Cl
 
             Registry registry1 = LocateRegistry.getRegistry(backupIp, Integer.parseInt(backupPort));
             backupRef = (ClientCommunicationInterface) registry1.lookup(backupReference);
+
+            System.out.println("Primary process ready!");
         } catch (ConnectException e) {
             System.out.println("Server is not available!");
             System.exit(-1);
@@ -107,27 +109,26 @@ public class VehicleApplicationPrimary extends UnicastRemoteObject implements Cl
     public void collectData(double latitude, double longitude) throws RemoteException {
         long current = counter.longValue();
         //send data to server as well
-
-        if (current == 0) {
-            try {
-                timer_heartbeat.schedule(new Heartbeat(serverRef, counter, 1), 0, 400);
-            } catch (Exception e) {
-                timer_heartbeat.cancel();
-                System.out.println("Exception occurred! Not sending heartbeat anymore!");
-                e.printStackTrace();
+        try {
+            if (current == 0) {
+                timer_heartbeat.schedule(new Heartbeat(serverRef, counter, 1), 0, 2000);
             }
-
-        }
-
-        if (latitude > 80.0 || longitude < 10.0) {
-            System.out.println("Error in critical process");
-            validCoordinates = false;
+            if (latitude > 80.0 || longitude < 10.0) {
+                System.out.println("Error in critical process at counter " + current);
+                validCoordinates = false;
+                timer_heartbeat.cancel();
+                System.exit(-1);
+            } else {
+                counter.getAndIncrement();
+                backupRef.aliveStatus(new Date(), current);
+                pmanagerRef.handleData(current, latitude, longitude);
+            }
+        } catch (Exception e) {
             timer_heartbeat.cancel();
-        } else {
-            counter.getAndIncrement();
-            backupRef.aliveStatus(new Date(), current);
-            pmanagerRef.handleData(current, latitude, longitude);
+            System.out.println("Exception occurred at " + current + "! Not sending heartbeat anymore!");
+            e.printStackTrace();
         }
+
     }
 
     @Override

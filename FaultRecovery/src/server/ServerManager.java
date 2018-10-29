@@ -20,10 +20,15 @@ public class ServerManager extends UnicastRemoteObject implements ServerCommunic
     private Date primary_lastUpdated;
     private Date backup_primary;
 
-    private boolean checkFlag = false;
-    private Timer check_heartbeat = new Timer();
+    private boolean checkPrimaryFlag = false;
+    private boolean checkBackupFlag = false;
+    private Timer checkPrimaryHeartbeat;
+    private Timer checkBackupHeartbeat;
     private static Properties props;
     private static ProcessManagerInterface pmanagerRef;
+
+
+    private long processCounter = 0;
 
     /**
      * This method loads the properties of application.
@@ -50,10 +55,18 @@ public class ServerManager extends UnicastRemoteObject implements ServerCommunic
     }
 
     @Override
-    public void setCheckFlag(boolean checkFlag) {
-        this.checkFlag = checkFlag;
+    public void setPrimaryCheckFlag(boolean checkFlag) {
+        this.checkPrimaryFlag = checkFlag;
         if (!checkFlag) {
-            this.check_heartbeat.cancel();
+            this.checkPrimaryHeartbeat.cancel();
+        }
+    }
+
+    @Override
+    public void setBackupCheckFlag(boolean checkFlag) throws RemoteException {
+        this.checkBackupFlag = checkFlag;
+        if (!checkFlag) {
+            this.checkBackupHeartbeat.cancel();
         }
     }
 
@@ -69,17 +82,22 @@ public class ServerManager extends UnicastRemoteObject implements ServerCommunic
         //check to see if the heartbeat is coming from the primary process - 1 or the back up process - 0
         if (processNumber == 1) {
             this.primary_lastUpdated = lastUpdated;
+            if (!this.checkPrimaryFlag) {
+                this.checkPrimaryFlag = true;
+                this.checkPrimaryHeartbeat = new Timer();
+                this.checkPrimaryHeartbeat.schedule(new CheckHeartbeat(this, processNumber, pmanagerRef), 0, 1000);
+            }
         } else {
             this.backup_primary = lastUpdated;
+            if (!this.checkBackupFlag) {
+                this.checkBackupFlag = true;
+                this.checkPrimaryHeartbeat = new Timer();
+                this.checkPrimaryHeartbeat.schedule(new CheckHeartbeat(this, processNumber, pmanagerRef), 0, 1000);
+            }
         }
 
-        if (!this.checkFlag) {
-            this.checkFlag = true;
-            this.check_heartbeat = new Timer();
-            this.check_heartbeat.schedule(new CheckHeartbeat(this, processNumber, pmanagerRef), 0, 1000);
-        }
+        System.out.println("New heartbeat time from " + (processNumber == 1 ? "Primary" : "Backup ") + " : " + lastUpdated);
 
-        System.out.println("New heartbeat time: " + lastUpdated);
     }
 
     protected ServerManager() throws RemoteException {
@@ -107,7 +125,7 @@ public class ServerManager extends UnicastRemoteObject implements ServerCommunic
         Registry registry = LocateRegistry.createRegistry(portNumber);
         registry.rebind("ServerReference", serverObj);
 
-        System.out.println("Server ready");
+        System.out.println("Server ready!");
 
 
     }

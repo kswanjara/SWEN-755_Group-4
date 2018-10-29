@@ -10,8 +10,10 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class DataGenerator implements Runnable {
+public class DataGenerator extends TimerTask {
 
     private static Properties props;
 
@@ -19,6 +21,8 @@ public class DataGenerator implements Runnable {
     static ClientCommunicationInterface backupRef;
 
     static boolean isPrimaryAvailable = true;
+
+    static Timer dataSender;
 
     public static void main(String[] args) {
         loadProperties();
@@ -33,13 +37,13 @@ public class DataGenerator implements Runnable {
             Registry registry1 = LocateRegistry.getRegistry(props.getProperty("vehicle.app.ip"), Integer.parseInt(props.getProperty("vehicle.app.port2")));
             backupRef = (ClientCommunicationInterface) registry1.lookup(backupProcess);
 
-            while (true) {
-                Thread t = new Thread(new DataGenerator());
-                t.start();
-            }
+            System.out.println("Sending data to both Primary and Backup processes!");
+            dataSender = new Timer();
+            dataSender.schedule(new DataGenerator(), 0, 1000);
+
 
         } catch (ConnectException e) {
-            System.out.println("Processes not available is not available!");
+            System.out.println("Processes not available!");
             System.exit(-1);
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,15 +80,14 @@ public class DataGenerator implements Runnable {
                 primaryRef.collectData(latitude, longitude);
             } catch (Exception e) {
                 isPrimaryAvailable = false;
-                System.out.println("No Primary process available!");
             }
         }
         try {
             backupRef.collectData(latitude, longitude);
-        } catch (Exception e) {
-            System.out.println("No backup process available!");
+        }catch (Exception e){
+            System.out.println("Backup process not available! Aborting.. ");
+            dataSender.cancel();
         }
-
         return true;
     }
 
@@ -92,7 +95,7 @@ public class DataGenerator implements Runnable {
     public void run() {
         try {
             getCoordinates();
-            Thread.sleep(2000);
+            Thread.sleep(5000);
         } catch (RemoteException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

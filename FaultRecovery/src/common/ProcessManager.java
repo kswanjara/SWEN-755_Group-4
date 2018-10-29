@@ -72,6 +72,7 @@ public class ProcessManager extends UnicastRemoteObject implements ProcessManage
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("Process manager(Third component) is ready!");
     }
 
     @Override
@@ -89,7 +90,7 @@ public class ProcessManager extends UnicastRemoteObject implements ProcessManage
 
     @Override
     public void handleData(long counter, double latitude, double longitude) throws RemoteException {
-        System.out.println("Process in use : " + (useBackup ? "Backup" : "Primary") + counter + " " + latitude + " " + longitude);
+//        System.out.println("Process in use : " + (useBackup ? "Backup " : "Primary ") + counter + " " + latitude + " " + longitude);
     }
 
 
