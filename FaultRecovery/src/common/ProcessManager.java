@@ -1,7 +1,5 @@
 package common;
 
-import DataGenerator.DataGenerator;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.NotBoundException;
@@ -14,13 +12,13 @@ import java.util.Properties;
 public class ProcessManager extends UnicastRemoteObject implements ProcessManagerInterface {
 
     private static ServerCommunicationInterface serverRef;
-    boolean usePrimary = true;
-    boolean useBackup = false;
+    private boolean usePrimary = true;
+    private boolean useBackup = false;
 
-    long counter;
+    private long counter;
 
-    static ClientCommunicationInterface primaryRef;
-    static ClientCommunicationInterface backupRef;
+    private static ClientCommunicationInterface primaryRef;
+    private static ClientCommunicationInterface backupRef;
     private static Properties props;
 
 
@@ -90,8 +88,6 @@ public class ProcessManager extends UnicastRemoteObject implements ProcessManage
 
     @Override
     public void handleData(long counter, double latitude, double longitude) throws RemoteException {
-//        System.out.println("Process in use : " + (useBackup ? "Backup " : "Primary ") + counter + " " + latitude + " " + longitude);
+        //System.out.println("Process in use : " + (useBackup ? "Backup " : "Primary ") + counter + " " + latitude + " " + longitude);
     }
-
-
 }

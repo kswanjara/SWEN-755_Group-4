@@ -1,6 +1,5 @@
 package server;
 
-import DataGenerator.DataGenerator;
 import common.ProcessManagerInterface;
 import common.ServerCommunicationInterface;
 

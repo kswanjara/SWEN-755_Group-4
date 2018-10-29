@@ -12,9 +12,9 @@ public interface ServerCommunicationInterface extends Remote {
 
     Date getLastUpdated(int processNumber) throws RemoteException;
 
-    public String connectToServer(String connectionMessage) throws RemoteException;
+    String connectToServer(String connectionMessage) throws RemoteException;
 
-    public void sendHeartbeat(Date lastUpdated, long serverRef, int processNumber) throws RemoteException;
+    void sendHeartbeat(Date lastUpdated, long serverRef, int processNumber) throws RemoteException;
 
-    public void processManagerUp() throws RemoteException, NotBoundException;
+    void processManagerUp() throws RemoteException, NotBoundException;
 }

@@ -1,7 +1,6 @@
 package DataGenerator;
 
 import common.ClientCommunicationInterface;
-import common.ServerCommunicationInterface;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,12 +16,12 @@ public class DataGenerator extends TimerTask {
 
     private static Properties props;
 
-    static ClientCommunicationInterface primaryRef;
-    static ClientCommunicationInterface backupRef;
+    private static ClientCommunicationInterface primaryRef;
+    private static ClientCommunicationInterface backupRef;
 
-    static boolean isPrimaryAvailable = true;
+    private static boolean isPrimaryAvailable = true;
 
-    static Timer dataSender;
+    private static Timer dataSender;
 
     public static void main(String[] args) {
         loadProperties();
@@ -69,11 +68,11 @@ public class DataGenerator extends TimerTask {
     public static boolean getCoordinates() throws IOException {
         double minLat = -90.00;
         double maxLat = 90.00;
-        double latitude = minLat + (double) (Math.random() * ((maxLat - minLat) + 1));
+        double latitude = minLat + (Math.random() * ((maxLat - minLat) + 1));
 
         double minLon = 0.00;
         double maxLon = 180.00;
-        double longitude = minLon + (double) (Math.random() * ((maxLon - minLon) + 1));
+        double longitude = minLon + (Math.random() * ((maxLon - minLon) + 1));
 
         if (isPrimaryAvailable) {
             try {

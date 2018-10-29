@@ -27,7 +27,7 @@ public class VehicleApplicationPrimary extends UnicastRemoteObject implements Cl
     private static Timer timer_heartbeat = new Timer();
     private static AtomicLong counter = new AtomicLong(0L);
 
-    private static boolean validCoordinates = true;
+    private boolean validCoordinates = true;
 
     private static Properties props;
 
@@ -115,7 +115,7 @@ public class VehicleApplicationPrimary extends UnicastRemoteObject implements Cl
             }
             if (latitude > 80.0 || longitude < 10.0) {
                 System.out.println("Error in critical process at counter " + current);
-                validCoordinates = false;
+                this.validCoordinates = false;
                 timer_heartbeat.cancel();
                 System.exit(-1);
             } else {
