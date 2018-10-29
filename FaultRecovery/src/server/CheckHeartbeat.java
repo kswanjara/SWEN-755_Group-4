@@ -80,7 +80,7 @@ class CheckHeartbeat extends TimerTask {
         }
 
 
-//        System.out.println((current_time - last_updated) + " seconds since last update, checking again in ( " + this.checkingInterval + " ) second....");
+        System.out.println((current_time - last_updated) + " seconds since last update, checking again in ( " + this.checkingInterval + " ) second....");
     }
 
     public int getCheckingInterval() {
