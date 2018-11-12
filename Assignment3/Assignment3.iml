@@ -7,5 +7,32 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Downloads/PriortyExecutorService-1.0/lib/PriorityDeque-1.0.jar!/" />
+          <root url="jar://$USER_HOME$/Downloads/PriortyExecutorService-1.0/PriortyExecutorService-1.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/Downloads/PriortyExecutorService-1.0/lib/PriorityDeque-1.0-sources.jar!/" />
+          <root url="jar://$USER_HOME$/Downloads/PriortyExecutorService-1.0/PriortyExecutorService-1.0-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="file://$USER_HOME$/Downloads/PriortyExecutorService-1.0" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$USER_HOME$/Downloads/PriortyExecutorService-1.0" />
+        </SOURCES>
+        <jarDirectory url="file://$USER_HOME$/Downloads/PriortyExecutorService-1.0" recursive="false" />
+        <jarDirectory url="file://$USER_HOME$/Downloads/PriortyExecutorService-1.0" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="PriorityDeque-1.0" level="project" />
   </component>
 </module>
