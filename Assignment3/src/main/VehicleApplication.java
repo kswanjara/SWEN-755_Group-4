@@ -1,8 +1,8 @@
 package main;
 
-import java.util.Timer;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 import DataGenerator.DataGenerator;
 import DataGenerator.Constants;
@@ -16,6 +16,9 @@ public class VehicleApplication {
     }
 
     public static PriorityExecutorService pool;
+
+    public static AtomicLong number = new AtomicLong(1);
+    public static CopyOnWriteArrayList<Long> primeNumbers = new CopyOnWriteArrayList<>();
 
     public static double randomizeLongitude(double min) {
         return min + Math.random() * (Constants.MAX_LONGITUDE - min);
@@ -31,18 +34,14 @@ public class VehicleApplication {
             double maxLatitudeLimit = minLatitudeLimit;
             double minLongitudeLimit = Constants.MIN_LONGITUDE;
             double maxLongitudeLimit = minLongitudeLimit;
-//            double minLatitudeLimit = randomizeLatitude(Constants.MIN_LATITUDE);
-//            double maxLatitudeLimit = randomizeLatitude(minLatitudeLimit);
-//            double minLongitudeLimit = randomizeLongitude(Constants.MIN_LONGITUDE);
-//            double maxLongitudeLimit = randomizeLongitude(minLongitudeLimit);
 
             Runnable task = new DataGenerator(i, minLatitudeLimit, maxLatitudeLimit,
                     minLongitudeLimit, maxLongitudeLimit);
             pool.submit(task, 5);
         }
 
-        for (int i = 1; i <= 10; i++) {
-            pool.submit(new HighPriorityTask(i), Thread.MAX_PRIORITY);
+        for (int i = 1; i <= 100000; i++) {
+            pool.submit(new ConcurrentPrimeGenerator(number, primeNumbers), 7);
         }
 
         // We have executed all the tasks!
@@ -55,6 +54,7 @@ public class VehicleApplication {
             System.out.println("Something went wrong.");
         } finally {
             System.out.println("Done!");
+            System.out.println("Total prime generated : " + primeNumbers.size());
         }
     }
 }

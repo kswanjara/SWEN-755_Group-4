@@ -37,16 +37,10 @@ public class DataGenerator implements Runnable {
         // Get the thread's id
         long threadId = Thread.currentThread().getId() % Constants.THREAD_POOL_SIZE + 1;
 
-        // Print the limits.
-//        System.out.println("[Thread " + threadId + " | Worker " + workerId + "] Min Latitude: " + minLatitudeLimit + ", Max Latitude: " + maxLatitudeLimit + "\n"
-//                + "Min Longitude: " + minLongitudeLimit + ", Max Longitude: " + maxLongitudeLimit + "\n");
-
         // Keep generating a coordinate till it falls in the range
         Coordinate coordinate = generateCoordinate();
 
-        while (!(coordinate.getLatitude() > 89.8 && coordinate.getLongitude() < 0.2)) {
-//        while (!(coordinate.getLatitude() > minLatitudeLimit && coordinate.getLatitude() < maxLatitudeLimit
-//                && coordinate.getLongitude() > minLongitudeLimit && coordinate.getLongitude() < maxLongitudeLimit)) {
+        while (!(coordinate.getLatitude() > 89.8 && coordinate.getLongitude() < 0.5)) {
             coordinate = generateCoordinate();
         }
 
