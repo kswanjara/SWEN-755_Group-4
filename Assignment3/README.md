@@ -1,10 +1,14 @@
 # Assignment 3
 
 ## Instructions to Run
+1. Download and Compile the code.
+2. Add the jar files in the lib folder to the classpath.
+3. Run the VehicleApplication.java class
+
+## Downloading the Jar outside of our project (if the above doesn't work)
 1. Navigate to [this website](https://funofprograming.wordpress.com/2016/10/08/priorityexecutorservice-for-java/).  Download the PriorityExecutorService.zip file, which contains several jar files used in our project.
-2. Extract this file into your downloads folder (you can leave it there).  (If you are still unsure about the jar files, view the Assignment3.iml file.  This will display the expected path/location of the jar files).
-3. Download and Compile the code.
-4. Run the VehicleApplication.java class
+2. Extract this file into your downloads folder (you can leave it there).  
+3. If you are still unsure about the jar files, view the Assignment3.iml file.  This will display the expected path/location of the jar files.
 
 ## Critical Process Details
 We implemented two critical processes:
