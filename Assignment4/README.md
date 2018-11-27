@@ -1,6 +1,6 @@
 # Assignment 4
 
-## Checklist
+## To-Do
 - [x] Authentication (Login/Register/Logout)
 - [ ] Authorization (Roles)
 - [ ] Session Management
