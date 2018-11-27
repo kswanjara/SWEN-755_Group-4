@@ -22,7 +22,8 @@ const notAuth = function(req, res, next) {
 
 router.get('/', auth, (req, res) => {
     res.render('index', {
-        username: req.session.user
+        user: req.session.user,
+        role: req.session.role
     });
 });
 
