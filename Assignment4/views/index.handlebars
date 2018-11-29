@@ -13,7 +13,8 @@ Do you want to logout? Go <a href="/logout">here</a>.
 	// END TEST
 
 	var validNavigation = 0;
-	 
+	console.log(validNavigation);
+	
 	async function endSession() {
 	   var result = await $.ajax({
 		    type: 'post',
@@ -27,6 +28,7 @@ Do you want to logout? Go <a href="/logout">here</a>.
 	function bindDOMEvents() {
 	// unload works on both closing tab and on refreshing tab.
 	window.onbeforeunload = function() {
+		alert(validNavigation);
 	   if (validNavigation==0) {
 	     endSession();
 	   }
