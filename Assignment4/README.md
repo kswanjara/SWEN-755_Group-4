@@ -3,11 +3,13 @@
 ## To-Do
 - [x] Authentication (Login/Register/Logout)
 - [ ] Authorization (Roles)
-- [ ] Session Management
+   - [x] Add an User task
+   - [x] Add an Admin task
+- [x] Session Management
    - [x] Save the session when logged in
    - [x] Destroy the session when user is inactive after 10 seconds
-   - [ ] Destroy the session when user closes the tab
-   - [ ] Destroy the session when user closes the window
+   - [x] Destroy the session when user closes the tab
+   - [x] Destroy the session when user closes the window
 
 
 ## Dependencies
