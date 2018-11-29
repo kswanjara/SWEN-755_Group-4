@@ -26,11 +26,11 @@ Do you want to logout? Go <a href="/logout">here</a>.
 	 
 	function bindDOMEvents() {
 	// unload works on both closing tab and on refreshing tab.
-	$(window).on("unload", function() {
+	window.onbeforeunload = function() {
 	   if (validNavigation==0) {
 	     endSession();
 	   }
-	});
+	};
 	 
 	// Attach the event keypress to exclude the F5 refresh
 	$(document).keydown(function(e) {
