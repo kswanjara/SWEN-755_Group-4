@@ -3,8 +3,8 @@
 ## To-Do
 - [x] Authentication (Login/Register/Logout)
 - [ ] Authorization (Roles)
-   - [x] Add an User task
-   - [x] Add an Admin task
+   - [ ] Add an User task
+   - [ ] Add an Admin task
 - [x] Session Management
    - [x] Save the session when logged in
    - [x] Destroy the session when user is inactive after 10 seconds
