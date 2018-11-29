@@ -23,3 +23,10 @@
 2. Run `npm install`
 3. Run `node app.js`
 4. Open `http://localhost:3000`
+
+## Admin Functionality
+All created accounts are assigned the 'user' role.  To access admin functionality, log in with the predefined admin information:
+= username: admin
+- password: admin
+
+This will allow you to view and utilize the designated admin functionality
