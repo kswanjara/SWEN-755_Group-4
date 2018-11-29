@@ -46,7 +46,8 @@ router.get('/logout', (req, res) => {
     res.redirect('/login');
 });
 
-router.post('/destroy', notAuth, function (req, res) {
+router.post('/destroy', function (req, res) {
+    console.log('Success!')
     req.session.destroy();
 });
 
