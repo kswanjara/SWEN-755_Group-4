@@ -3,3 +3,62 @@
 <h3>Your role is {{role}}.</h3>
 
 Do you want to logout? Go <a href="/logout">here</a>.
+
+<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+<script>
+	// TEST CODE - REMOVE THIS WHEN WORKING
+	$('h3').click(function() {
+		endSession();
+	});
+	// END TEST
+
+	var validNavigation = 0;
+	 
+	async function endSession() {
+	   var result = await $.ajax({
+		    type: 'post',
+		    url: '/destroy',
+		    success: function (data) {
+		    	alert("destroyed");
+		    }
+		});
+	}
+	 
+	function bindDOMEvents() {
+	// unload works on both closing tab and on refreshing tab.
+	$(window).on("unload", function() {
+	   if (validNavigation==0) {
+	     endSession();
+	   }
+	});
+	 
+	// Attach the event keypress to exclude the F5 refresh
+	$(document).keydown(function(e) {
+	   var key=e.which || e.keyCode;
+	   if (key == 116) {
+	     validNavigation = 1;
+	   }
+	});
+	 
+	// Attach the event click for all links in the page
+	$("a").bind("click", function() {
+	   validNavigation = 1;
+	});
+	 
+	 // Attach the event submit for all forms in the page
+	 $("form").bind("submit", function() {
+	   validNavigation = 1;
+	});
+	 
+	 // Attach the event click for all inputs in the page
+	 $("input[type=submit]").bind("click", function() {
+	   validNavigation = 1;
+	});
+	 
+	}
+	 
+	// Wire up the events as soon as the DOM tree is ready
+	$(document).ready(function() {
+	   bindDOMEvents(); 
+	});
+</script>

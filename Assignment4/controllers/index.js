@@ -46,6 +46,10 @@ router.get('/logout', (req, res) => {
     res.redirect('/login');
 });
 
+router.post('/destroy', notAuth, function (req, res) {
+    req.session.destroy();
+});
+
 router.post('/register', notAuth, function (req, res) {
     User.forge({
             username: req.body.username,
