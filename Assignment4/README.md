@@ -26,7 +26,7 @@
 
 ## Admin Functionality
 All created accounts are assigned the 'user' role.  To access admin functionality, log in with the predefined admin information:
-= username: admin
+- username: admin
 - password: admin
 
 This will allow you to view and utilize the designated admin functionality
