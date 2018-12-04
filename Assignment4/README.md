@@ -13,15 +13,14 @@
 
 
 ## Dependencies
-- A working computer
 - NodeJS
 - NPM
 
 
 ## Instructions
 1. Download the repository
-2. Run `npm install`
-3. Run `node app.js`
+2. Run `npm install` from the repository
+3. Run `node app.js` from where node.js was downloaded to
 4. Open `http://localhost:3000`
 
 ## Admin Functionality
