@@ -62,7 +62,6 @@ Otherwise, here is some fun functionality for you just in case you're bored!
 	}
 
 	function startGuessing(){
-		console.log(randomNumber);
 		var guess = $("#guess").val();
 
 		var guessesLeft = parseInt($("#guessesLeft").text());
@@ -76,8 +75,8 @@ Otherwise, here is some fun functionality for you just in case you're bored!
 		}else if(guess < randomNumber && guessesLeft > 1){
 			$("#hint").text("Your guess was too low!");
 		}else{
-			$("#hint").text("So sorry, but you have run out of guesses, the game is over! :( " +
-			"If you would like to play again, just hit start game again.");
+			$("#hint").text("So sorry, but you have run out of guesses, the game is over! The number to guess was " + randomNumber + 
+			"If you would like to play again, just hit start.");
 
 			return;
 		}
