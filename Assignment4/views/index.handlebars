@@ -2,7 +2,21 @@
 <h2>Welcome, {{user}}!</h2>
 <h3>Your role is {{role}}.</h3>
 
-Do you want to logout? Go <a href="/logout">here</a>.
+Do you want to logout? Go <a href="/logout">here</a>.<br />
+
+Otherwise, here is some fun functionality for you just in case you're bored!
+
+<a id="startGame" href="#" onclick="openGame()"> Start Game</a><br /><br />
+
+<div id="game-div" style="display: none">
+	You have <span id="guessesLeft">5</span> tries to guess a number between 1 and 20.<br />
+	Guess Number: <input type="number" id="guess"> </input><input type="submit" onclick="startGuessing()"></input><br />
+	<p id="hint"> </p>
+</div>
+
+<div id="congrats" style="display: none; color: red; font-size: 36px">
+	Congratulations! You won! If you would like to play again, just click start game again.
+</div>
 
 <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
 <script>
@@ -11,6 +25,9 @@ Do you want to logout? Go <a href="/logout">here</a>.
 		endSession();
 	});
 	// END TEST
+
+	var randomNumber = 0;
+	var defaultGuesses = 5;
 
 	var validNavigation = 0;
 	console.log(validNavigation);
@@ -23,6 +40,47 @@ Do you want to logout? Go <a href="/logout">here</a>.
 		    	alert("destroyed");
 		    }
 		});
+	}
+
+	$("#guess").on("keyup", function(event){
+		if(event.keyCode == 13){
+			startGuessing();
+		}
+	});
+
+	function openGame(){
+		if($('#congrats').css('display') == 'block'){
+			document.getElementById('congrats').style.display = "none";
+		}
+		
+		$("#guess").val("");
+		$("#hint").text("");
+		$("#guessesLeft").text(defaultGuesses);
+
+		randomNumber = Math.floor((Math.random() * 20) + 1);
+		document.getElementById("game-div").style.display = "block";
+	}
+
+	function startGuessing(){
+		console.log(randomNumber);
+		var guess = $("#guess").val();
+
+		var guessesLeft = parseInt($("#guessesLeft").text());
+		$("#guessesLeft").text(guessesLeft - 1);
+
+		if(guess == randomNumber){
+			document.getElementById('congrats').style.display = "block";
+			$("#hint").text("");
+		}else if(guess > randomNumber && guessesLeft > 1){
+			$("#hint").text("Your guess was too high!");
+		}else if(guess < randomNumber && guessesLeft > 1){
+			$("#hint").text("Your guess was too low!");
+		}else{
+			$("#hint").text("So sorry, but you have run out of guesses, the game is over! :( " +
+			"If you would like to play again, just hit start game again.");
+
+			return;
+		}
 	}
 	 
 	function bindDOMEvents() {
