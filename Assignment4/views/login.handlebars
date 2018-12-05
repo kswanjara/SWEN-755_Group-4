@@ -1,16 +1,23 @@
 <form action="/login" method="POST" autocomplete="off">
     <h1>Login</h1>
-    {{#if complete}}
-    Successful! Go <a href="/">here</a> for the homepage.
-    {{else}}
-
-    {{#if error}}
-    Try again. Either the username/password combination is invalid or the user does not exist.<hr>
+    {{#if admin}}
+        Successful! Hello Admin, go <a href="/">here</a> for the homepage.
     {{/if}}
 
-    Username: <input type="text" name="username"><br>
-    Password: <input type="password" name="password"><br>
-    <input type="submit" name="submit" value="Login"><br><br>
-    Not registered yet? Go <a href="/register">here</a>.
-    {{/if}}
+    {{#unless admin}}
+        {{#if complete}}
+        Successful! Go <a href="/">here</a> for the homepage.
+        {{else}}
+
+            {{#if error}}
+            Try again. Either the username/password combination is invalid or the user does not exist.<hr>
+            {{/if}}
+
+            Username: <input type="text" name="username"><br>
+            Password: <input type="password" name="password"><br>
+            <input type="submit" name="submit" value="Login"><br><br>
+            Not registered yet? Go <a href="/register">here</a>.
+        {{/if}}
+    {{/unless}}
+    
 </form>

@@ -2,6 +2,8 @@
 <h2>Welcome, {{user}}!</h2>
 <h3>Your role is {{role}}.</h3>
 
+<span id="admin"> </span>
+
 Do you want to logout? Go <a href="/logout">here</a>.<br />
 
 Otherwise, here is some fun functionality for you just in case you're bored!
@@ -48,6 +50,16 @@ Otherwise, here is some fun functionality for you just in case you're bored!
 		}
 	});
 
+	function changeBackgroundColor(color){
+		if(color == "blue"){
+			document.body.style.backgroundColor = "#91bae3";
+		}else if(color == "green"){
+			document.body.style.backgroundColor = "#82d17c";
+		}else{
+			document.body.style.backgroundColor = "white";
+		}
+	}
+
 	function openGame(){
 		if($('#congrats').css('display') == 'block'){
 			document.getElementById('congrats').style.display = "none";
@@ -82,6 +94,15 @@ Otherwise, here is some fun functionality for you just in case you're bored!
 
 			return;
 		}
+	}
+
+	function hover(element){
+		element.style.color = "red";
+		element.style.cursor = "pointer";
+	}
+	function hoverOff(element){
+		element.style.color = "black";
+		element.style.cursor = "default";
 	}
 	 
 	function bindDOMEvents() {
@@ -120,6 +141,16 @@ Otherwise, here is some fun functionality for you just in case you're bored!
 	 
 	// Wire up the events as soon as the DOM tree is ready
 	$(document).ready(function() {
-	   bindDOMEvents(); 
+		bindDOMEvents(); 
+
+	    if('{{role}}' === "Admin"){
+			menu = "Since you are admin, you get to change the background of this page to one of the following colors: " +
+					"<ol id='color-list' style='text-align: center; list-style-position: inside'>" +
+						"<li onmouseover=hover(this) onmouseout=hoverOff(this) onclick=changeBackgroundColor('blue')> Blue-ish </li>" +
+						"<li onmouseover=hover(this) onmouseout=hoverOff(this) onclick=changeBackgroundColor('green')> Green-ish </li>" +
+						"<li onmouseover=hover(this) onmouseout=hoverOff(this) onclick=changeBackgroundColor()> Default (Definitely White) </li>" +
+					"</ol>";
+			$('#admin').append(menu)
+		}
 	});
 </script>

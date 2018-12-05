@@ -82,19 +82,31 @@ router.post('/login', notAuth, function (req, res) {
                         req.session.user = user.get('username');
                         req.session.role = user.get('role');
 
-                        res.render('login', {
-                            complete: true,
-                            error: false
-                        });
+                        if(user.get('role') === "Admin"){
+                            res.render('login', {
+                                admin: true,
+                                complete: true,
+                                error: false
+                            });
+                        }else{
+                            res.render('login', {
+                                admin: false,
+                                complete: true,
+                                error: false
+                            });
+                        }
                     } else {
                         res.render('login', {
+                            admin: false,
                             complete: false,
                             error: true
                         });
                     }
                 });
+
             } else {
                 res.render('login', {
+                    admin: false,
                     complete: false,
                     error: true
                 });
@@ -102,6 +114,7 @@ router.post('/login', notAuth, function (req, res) {
         })
         .catch(function (err) {
             res.render('login', {
+                admin: false,
                 complete: false,
                 error: true
             });
