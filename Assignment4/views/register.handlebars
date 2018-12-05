@@ -1,16 +1,16 @@
 <form action="/register" method="POST" autocomplete="off">
     <h1>Registration</h1>
     {{#if complete}}
-    Successful! Go <a href="/login">here</a> to login.
+        Successful! Go <a href="/login">here</a> to login.
     {{else}}
 
     {{#if error}}
-    Try again. The username is taken already.<hr>
+        Try again. The username is taken already.<hr>
     {{/if}}
 
-    Username: <input type="text" name="username"><br>
-    Password: <input type="password" name="password"><br>
-    <input type="submit" name="submit" value="Register"><br><br>
-    Already have an account? Go <a href="/login">here</a>.
+        Username: <input type="text" name="username"><br>
+        Password: <input type="password" name="password"><br>
+        <input type="submit" name="submit" value="Register"><br><br>
+        Already have an account? Go <a href="/login">here</a>.
     {{/if}}
 </form>
